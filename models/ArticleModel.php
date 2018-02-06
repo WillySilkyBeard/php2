@@ -27,5 +27,4 @@ public function getById($id) {
 		}
 		return $res;
 	}
-
 }

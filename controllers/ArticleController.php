@@ -1,12 +1,7 @@
 <?php
 
-class ArticleController 
+class ArticleController extends MainController
 {
-	protected $get;
-	public function __construct($get) {
-		$this->get = $get;
-	}
-
 	public function indexAction() {
 		$mArticle = new ArticleModel();
 		$articles = $mArticle->getAll();
@@ -19,17 +14,22 @@ class ArticleController
 		$mArticle = new ArticleModel();
 
 		$id = $this->get['id'];
-
 		$article = $mArticle->getById($id);
+
+		$htmlGen = new HTMLGenerator($article);
+		$htmlGen
+		->wrapEachInP()
+		->addTo(HTMLGenerator::getImg('./img/avatar.jpg'), 'p', 1, 1)
+		->wrapAllInBox('wrapper');
+		$article = $htmlGen->beautyText;
+
+/*echo "<pre>";
+var_dump($article);
+echo "</pre>";
+die();*/
 
 		echo $this->render('view/article.php', [
 			'article' => $article
 		]);
-	}
-	protected function render($filename, $values = array()) {
-		extract($values);
-		ob_start();
-		include("$filename");
-		return ob_get_clean();
 	}
 }
